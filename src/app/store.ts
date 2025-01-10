@@ -6,6 +6,7 @@ import patientReducer from '../features/patient/patient';
 import dietReducer from '../features/dietChart/dietChart';
 import pantryReducer from '../features/pantry/pantry';
 import pantryTaskReducer from '../features/pantry/pantryTask';
+import deliverReducer from '../features/delivery/delivery';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     diet: dietReducer,
     pantry: pantryReducer,
     pantryTask: pantryTaskReducer,
+    delivery: deliverReducer,
 
   },
 });

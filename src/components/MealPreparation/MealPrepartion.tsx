@@ -43,15 +43,17 @@ import { fetchDietCharts } from "@/features/dietChart/dietChart";
 interface MealPreparationProps {
      isPantry: boolean;
      isDelivery: boolean;
+      isManager: boolean;
 }
 
-const MealPreparation = ({ isPantry, isDelivery }: MealPreparationProps) => {
+const MealPreparation = ({ isPantry, isDelivery, isManager }: MealPreparationProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { pantryTasks, error } = useSelector(
     (state: RootState) => state.pantryTask
   );
   const { patients } = useSelector((state: RootState) => state.patient);
   const { dietCharts } = useSelector((state: RootState) => state.diet);
+  const {deliveryPersonnel} = useSelector((state: RootState) => state.delivery);
   const [selectedDietChart, setSelectedDietChart] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -62,11 +64,11 @@ const MealPreparation = ({ isPantry, isDelivery }: MealPreparationProps) => {
     setLoading(false);
   }, [dispatch]);
 
-  const handleUpdate = ({ id, preparationStatus, deliveryStatus }: any) => {
+  const handleUpdate = ({ id, preparationStatus, deliveryStatus, assignedTo }: any) => {
     dispatch(
       updatePantryTask({
         id,
-        pantryTaskData: { preparationStatus, deliveryStatus },
+        pantryTaskData: { preparationStatus, deliveryStatus, assignedTo },
       })
     ).then(() => {
       dispatch(fetchPantryTasks());
@@ -79,7 +81,7 @@ const MealPreparation = ({ isPantry, isDelivery }: MealPreparationProps) => {
 
   return (
     <div className="p-6 w-full rounded-lg flex justify-normal gap-20 md:flex-row flex-col">
-      <div className="">
+      <div className=" w-full">
         <h1 className="text-2xl font-semibold mb-6">Pantry Tasks</h1>
         <div className="overflow-x-auto">
           <Table className="w-full border border-gray-200 rounded-lg overflow-hidden">
@@ -112,6 +114,14 @@ const MealPreparation = ({ isPantry, isDelivery }: MealPreparationProps) => {
                          Delivery Notes
                     </TableCell>
                     )}   
+
+                    {
+                      isManager && (
+                        <TableCell className="py-3 px-4 font-semibold text-gray-700">
+                          Assigned To
+                        </TableCell>
+                      )
+                    }
 
               </TableRow>
             </TableHeader>
@@ -223,7 +233,7 @@ const MealPreparation = ({ isPantry, isDelivery }: MealPreparationProps) => {
                   {isPantry && (
                     <TableCell className="py-2 px-4 text-gray-600">
                       <Dialog>
-                        <DialogTrigger asChild className="mt-4">
+                        <DialogTrigger asChild className="">
                           <Button
                             onClick={() =>
                               setSelectedDietChart(task.dietChartId)
@@ -300,6 +310,62 @@ const MealPreparation = ({ isPantry, isDelivery }: MealPreparationProps) => {
                          }
                       </TableCell>
                     )}
+
+                    {
+                      isManager && (
+                        <TableCell className="py-2 px-4 text-gray-600">
+                          <Select
+                            onValueChange={(value) =>
+                              handleUpdate({
+                                id: task.id,
+                                preparationStatus: task.preparationStatus,
+                                deliveryStatus: task.deliveryStatus,
+                                assignedTo: value,
+                              })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder={task?.assignedTo || "Assign Delivery" } />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectLabel>Assigned To</SelectLabel>
+                                {
+                                  deliveryPersonnel.map((person: any) => (
+                                    <SelectItem key={person.id} value={person.id.toString()}
+                                      onClick={() => {
+                                        handleUpdate({
+                                          id: task.id,
+                                          preparationStatus: task.preparationStatus,
+                                          deliveryStatus: task.deliveryStatus,
+                                          assignedTo: person.name,
+                                        });
+
+                                      }}
+                                    >
+                                      {
+                                        person.name
+                                      }
+                                    </SelectItem>
+                                  ))
+                                }
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                      )
+                    }
+
+
+                    {
+                      isDelivery && (
+                        <TableCell className="py-2 px-4 text-gray-600">
+                         {
+                           task?.assignedTo
+                         }
+                        </TableCell>
+                      )
+                    }
 
 
                 </TableRow>

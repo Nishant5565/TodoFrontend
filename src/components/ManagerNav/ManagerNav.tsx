@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { logout } from "@/features/auth/auth";
 
 interface ManagerNavProps {
   user: { name: string; role: string };
@@ -27,7 +28,7 @@ const ManagerNav = ({ user }: ManagerNavProps) => {
               </Link>
             </li>
             <li>
-              <Link href="/track-meal">
+              <Link href="/manager/meals">
                 <div className="text-gray-300 hover:text-white px-4 py-2 text-sm font-medium transition-all duration-200">
                   Track Meal
                 </div>
@@ -43,6 +44,19 @@ const ManagerNav = ({ user }: ManagerNavProps) => {
             </div>
             <div className="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center text-gray-200 font-bold">
               {user.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <Link href=" /"
+                onClick={() => {
+                  sessionStorage.removeItem("token");
+                  logout();
+                }
+              }
+              >
+                <div className="text-gray-300 hover:text-white px-4 py-2 text-sm font-medium transition-all duration-200">
+                  Logout
+                </div>
+              </Link>
             </div>
           </div>
         </div>

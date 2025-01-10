@@ -15,12 +15,6 @@ const useAuth = () => {
   useEffect(() => {
     if (!user && token) {
      dispatch(authUser()).then((result: any) => {
-        if (authUser.rejected.match(result)) {
-          toast.error('Failed to authenticate', { description: result.error.message });
-        }
-        else if (authUser.fulfilled.match(result)) {
-          toast.success("Logged in successfully", { description: "You are now logged in" });
-        }
      });
     }
   }, [user, token, dispatch]);

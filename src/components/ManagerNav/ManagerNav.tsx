@@ -41,7 +41,7 @@ const ManagerNav = ({ user }: ManagerNavProps) => {
         }
 
         {
-          user.role === "Pantry" &&      <ul className="flex space-x-6">
+          user.role === "Pantry" || user.role ==="Delivery" &&      <ul className="flex space-x-6">
 
         </ul>
 

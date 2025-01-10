@@ -39,6 +39,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { fetchDietCharts } from "@/features/dietChart/dietChart";
+import { fetchDeliveryPersons } from "@/features/delivery/delivery";
+import { fetchPantryStaff } from "@/features/pantry/pantry";
 
 interface MealPreparationProps {
      isPantry: boolean;
@@ -56,11 +58,14 @@ const MealPreparation = ({ isPantry, isDelivery, isManager }: MealPreparationPro
   const {deliveryPersonnel} = useSelector((state: RootState) => state.delivery);
   const [selectedDietChart, setSelectedDietChart] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const {pantryStaffs} = useSelector((state: RootState) => state.pantry);
   useEffect(() => {
     setLoading(true);
     dispatch(fetchPantryTasks());
+    dispatch(fetchDeliveryPersons());
     dispatch(fetchPatients());
     dispatch(fetchDietCharts());
+    dispatch(fetchPantryStaff());
     setLoading(false);
   }, [dispatch]);
 
@@ -92,9 +97,9 @@ const MealPreparation = ({ isPantry, isDelivery, isManager }: MealPreparationPro
                   "Room No.",
                   " Bed No. ",
                   "Floor No.",
-                  "Updated At",
-                  "Preparation Status",
-                  "Delivery Status",
+                  "Pantry",
+                  "Preparation",
+                  "Delivery",
                 ].map((header) => (
                   <TableCell
                     key={header}
@@ -116,12 +121,19 @@ const MealPreparation = ({ isPantry, isDelivery, isManager }: MealPreparationPro
                     )}   
 
                     {
-                      isManager && (
+                      isManager  && (
                         <TableCell className="py-3 px-4 font-semibold text-gray-700">
                           Assigned To
                         </TableCell>
                       )
                     }
+
+                    {
+                      isDelivery && (
+                        <TableCell className="py-3 px-4 font-semibold text-gray-700">
+                          Assigned To
+                        </TableCell>
+                      ) }
 
               </TableRow>
             </TableHeader>
@@ -166,8 +178,15 @@ const MealPreparation = ({ isPantry, isDelivery, isManager }: MealPreparationPro
                   </TableCell>
 
                   <TableCell className="py-2 px-4 text-gray-600">
-                    {task?.updatedAt.split("T")[0]}
+                    {
+                      pantryStaffs.find(
+                        (staff) => staff.id === task?.pantryId
+                      )?.staffName
+                     
+                    }
                   </TableCell>
+
+
                   <TableCell className="py-2 px-4 text-gray-600">
                     {isPantry ? (
                       <Select
@@ -325,30 +344,28 @@ const MealPreparation = ({ isPantry, isDelivery, isManager }: MealPreparationPro
                             }
                           >
                             <SelectTrigger>
-                              <SelectValue placeholder={task?.assignedTo || "Assign Delivery" } />
+                              <SelectValue placeholder={
+
+                                deliveryPersonnel.find( (person: any) => person.id === task.assignedTo)?.name
+                                
+                                || "Assign Delivery" } />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectGroup>
                                 <SelectLabel>Assigned To</SelectLabel>
-                                {
-                                  deliveryPersonnel.map((person: any) => (
-                                    <SelectItem key={person.id} value={person.id.toString()}
-                                      onClick={() => {
-                                        handleUpdate({
-                                          id: task.id,
-                                          preparationStatus: task.preparationStatus,
-                                          deliveryStatus: task.deliveryStatus,
-                                          assignedTo: person.name,
-                                        });
 
-                                      }}
-                                    >
-                                      {
-                                        person.name
-                                      }
-                                    </SelectItem>
-                                  ))
-                                }
+
+                                {deliveryPersonnel.map((person: any) => (
+                                  <SelectItem
+                                    key={person.id}
+                                    value={person.id.toString()}
+                                  >
+                                    {person.name}
+                                  </SelectItem>
+                                ))}
+
+
+                                
                               </SelectGroup>
                             </SelectContent>
                           </Select>
@@ -361,7 +378,8 @@ const MealPreparation = ({ isPantry, isDelivery, isManager }: MealPreparationPro
                       isDelivery && (
                         <TableCell className="py-2 px-4 text-gray-600">
                          {
-                           task?.assignedTo
+                            
+                            deliveryPersonnel.find( (person: any) => person.id === task.assignedTo)?.name || "Not Assigned"
                          }
                         </TableCell>
                       )

@@ -20,7 +20,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { fetchDeliveryPerson, fetchDeliveryPersons, createDeliveryPerson, deleteDeliveryPerson, updateDeliveryPerson } from "@/features/delivery/delivery";
+import {
+  fetchDeliveryPerson,
+  fetchDeliveryPersons,
+  createDeliveryPerson,
+  deleteDeliveryPerson,
+  updateDeliveryPerson,
+} from "@/features/delivery/delivery";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "@/app/store";
 import { RootState } from "@/app/store";
@@ -29,7 +35,9 @@ import { Button } from "../ui/button";
 import { fetchPantryStaff } from "@/features/pantry/pantry";
 
 const AddDelivery = () => {
-  const { loading, deliveryPersonnel } = useSelector((state: RootState) => state.delivery);
+  const { loading, deliveryPersonnel } = useSelector(
+    (state: RootState) => state.delivery
+  );
   const { pantryStaffs } = useSelector((state: RootState) => state.pantry);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -47,69 +55,79 @@ const AddDelivery = () => {
       })
       .catch((error: any) => {
         toast.error("Failed to delete delivery personnel", {
-          description: error.response?.data?.message || "Failed to delete delivery personnel",
+          description:
+            error.response?.data?.message ||
+            "Failed to delete delivery personnel",
         });
       });
   };
 
   const handleUpdateDelivery = (id: number) => {
-     const deliveryPersonData = {
-       name: "",
-       contactInfo: "",
-       additionalDetails: "",
-       pantryId: "",
-     };
+    const deliveryPersonData = {
+      name: "",
+      contactInfo: "",
+      additionalDetails: "",
+      pantryId: "",
+    };
 
-     dispatch(updateDeliveryPerson({id, deliveryPersonData}))
-       .unwrap()
-       .then(() => {
-          toast.success("Delivery personnel updated successfully");
-       })
-       .catch((error: any) => {
-          toast.error("Failed to update delivery personnel", {
-            description: error.response?.data?.message || "Failed to update delivery personnel",
-          });
-       });
-       }
-
+    dispatch(updateDeliveryPerson({ id, deliveryPersonData }))
+      .unwrap()
+      .then(() => {
+        deliveryPersonData.name = "";
+        deliveryPersonData.contactInfo = "";
+        toast.success("Delivery personnel updated successfully");
+      })
+      .catch((error: any) => {
+        toast.error("Failed to update delivery personnel", {
+          description:
+            error.response?.data?.message ||
+            "Failed to update delivery personnel",
+        });
+      });
+  };
 
   return (
-    <div>
-     <div>
-       {deliveryPersonnel.length === 0 ? (
-         <p className="text-gray-600 mt-4">No delivery personnel found</p>
-       ) : (
-         deliveryPersonnel.map((person) => (
-           <div
-             key={person.id}
-             className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm mt-4"
-           >
-             <div className="flex flex-col">
-               <p className=" font-semibold">{person.name}</p>
-               <p className="text-sm text-gray-500">{person.contactInfo}</p>
-               <p className="text-sm text-gray-500">{person.additionalDetails}</p>
-               <p className="text-sm text-gray-500">{
-                     pantryStaffs?.find((staff) => staff.id === person.pantryId)?.staffName
-                    }</p>
-             </div>
-             <div className="flex gap-2">
-               {/* <Button
+    <div >
+      <div className=" max-h-[70vh] overflow-y-auto">
+        {deliveryPersonnel.length === 0 ? (
+          <p className="text-gray-600 mt-4">No delivery personnel found</p>
+        ) : (
+          deliveryPersonnel.map((person) => (
+            <div
+              key={person.id}
+              className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm mt-4"
+            >
+              <div className="flex flex-col">
+                <p className=" font-semibold">{person.name}</p>
+                <p className="text-sm text-gray-500">{person.contactInfo}</p>
+                <p className="text-sm text-gray-500">
+                  {person.additionalDetails}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {
+                    pantryStaffs?.find((staff) => staff.id === person.pantryId)
+                      ?.staffName
+                  }
+                </p>
+              </div>
+              <div className="flex gap-2">
+                {/* <Button
                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
                  onClick={() => handleUpdateDelivery(person.id)}
                >
                  Update
                </Button> */}
-               <Button
-                 className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
-                 onClick={() => handleDeleteDelivery(person.id)}
-               >
-                 Delete
-               </Button>
-             </div>
-           </div>
-         ))
-       )}
-     </div>
+                <Button
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+                  onClick={() => handleDeleteDelivery(person.id)}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
 
       <div>
         <Sheet>
@@ -118,7 +136,9 @@ const AddDelivery = () => {
           </SheetTrigger>
           <SheetContent className="bg-white p-6 rounded-sm">
             <SheetHeader>
-              <SheetTitle className="text-xl font-semibold">Add A New Delivery Personnel</SheetTitle>
+              <SheetTitle className="text-xl font-semibold">
+                Add A New Delivery Personnel
+              </SheetTitle>
               <SheetDescription className="text-gray-600">
                 Please fill out the form below to add a new delivery personnel.
               </SheetDescription>
@@ -134,16 +154,18 @@ const AddDelivery = () => {
                 dispatch(createDeliveryPerson(values))
                   .unwrap()
                   .then(() => {
-                    toast.success("Delivery personnel added successfully");
-                    // * reset form
                     values.name = "";
                     values.contactInfo = "";
                     values.additionalDetails = "";
                     values.pantryId = "";
+                    toast.success("Delivery personnel added successfully");
+          
                   })
                   .catch((error: any) => {
                     toast.error("Failed to add delivery personnel", {
-                      description: error.response?.data?.message || "Failed to add delivery personnel",
+                      description:
+                        error.response?.data?.message ||
+                        "Failed to add delivery personnel",
                     });
                   });
               }}
@@ -153,25 +175,45 @@ const AddDelivery = () => {
                   <div className="flex items-center gap-10">
                     <div className="flex flex-col">
                       <label className="mb-1 text-sm font-normal">Name</label>
-                      <Field name="name" as={Input} className="border rounded p-2" />
+                      <Field
+                        name="name"
+                        as={Input}
+                        className="border rounded p-2"
+                      />
                     </div>
                     <div className="flex flex-col">
-                      <label className="mb-1 text-sm font-normal">Contact Information</label>
-                      <Field name="contactInfo" as={Input} className="border rounded p-2" />
+                      <label className="mb-1 text-sm font-normal">
+                        Contact Information
+                      </label>
+                      <Field
+                        name="contactInfo"
+                        as={Input}
+                        className="border rounded p-2"
+                      />
                     </div>
                   </div>
 
                   <div className="flex items-center gap-10">
                     <div className="flex flex-col">
-                      <label className="mb-1 text-sm font-normal">Additional Details</label>
-                      <Field name="additionalDetails" as={Input} className="border rounded p-2" />
+                      <label className="mb-1 text-sm font-normal">
+                        Additional Details
+                      </label>
+                      <Field
+                        name="additionalDetails"
+                        as={Input}
+                        className="border rounded p-2"
+                      />
                     </div>
                     <div className="flex flex-col">
-                      <label className="mb-1 text-sm font-normal">Pantry Staff</label>
+                      <label className="mb-1 text-sm font-normal">
+                        Pantry Staff
+                      </label>
                       <Field name="pantryId">
                         {({ field }: { field: any }) => (
                           <Select
-                            onValueChange={(value) => setFieldValue("pantryId", value)}
+                            onValueChange={(value) =>
+                              setFieldValue("pantryId", value)
+                            }
                             value={field.value}
                           >
                             <SelectTrigger>
@@ -180,11 +222,19 @@ const AddDelivery = () => {
                             <SelectContent>
                               <SelectGroup>
                                 <SelectLabel>Pantry Staff</SelectLabel>
-                                {pantryStaffs?.map((staff: { id: number; staffName: string }) => (
-                                  <SelectItem key={staff.id} value={staff.id.toString()}>
-                                    {staff.staffName}
-                                  </SelectItem>
-                                ))}
+                                {pantryStaffs?.map(
+                                  (staff: {
+                                    id: number;
+                                    staffName: string;
+                                  }) => (
+                                    <SelectItem
+                                      key={staff.id}
+                                      value={staff.id.toString()}
+                                    >
+                                      {staff.staffName}
+                                    </SelectItem>
+                                  )
+                                )}
                               </SelectGroup>
                             </SelectContent>
                           </Select>
@@ -194,7 +244,10 @@ const AddDelivery = () => {
                   </div>
 
                   <div className="flex justify-end">
-                    <button type="submit" className="mt-4 w-fit bg-black text-white px-8 py-2 rounded-lg">
+                    <button
+                      type="submit"
+                      className="mt-4 w-fit bg-black text-white px-8 py-2 rounded-lg"
+                    >
                       Submit
                     </button>
                   </div>

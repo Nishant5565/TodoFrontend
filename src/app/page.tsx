@@ -18,7 +18,7 @@ const Login: FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
     if (token) {
       dispatch(authUser()).then((response) => {
         console.log(response.payload);

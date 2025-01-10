@@ -1,3 +1,5 @@
+"use client"
+
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '../../utils/apiUrl';
@@ -21,7 +23,7 @@ const initialState: DeliveryPersonnelState = {
 export const fetchDeliveryPersons= createAsyncThunk(
   'deliveryPersonnel/fetchDeliveryPersonnel',
   async (_, { rejectWithValue }) => {
-    const token = sessionStorage.getItem('token');
+    const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
     try {
       const response = await axios.get(`${API_URL}/delivery`, {
         headers: {
@@ -40,7 +42,7 @@ export const fetchDeliveryPersons= createAsyncThunk(
 export const fetchDeliveryPerson = createAsyncThunk(
   'deliveryPersonnel/fetchDeliveryPerson',
   async (id: number, { rejectWithValue }) => {
-    const token = sessionStorage.getItem('token');
+    const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
     try {
       const response = await axios.get(`${API_URL}/delivery/${id}`, {
         headers: {
@@ -60,7 +62,7 @@ export const createDeliveryPerson = createAsyncThunk(
   'deliveryPersonnel/createDeliveryPerson',
   async (deliveryPersonData: any, { rejectWithValue }) => {
     try {
-      const token = sessionStorage.getItem('token');
+      const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
       const response = await axios.post(`${API_URL}/delivery`, deliveryPersonData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -80,7 +82,7 @@ export const updateDeliveryPerson = createAsyncThunk(
   'deliveryPersonnel/updateDeliveryPerson',
   async ({ id, deliveryPersonData }: { id: number; deliveryPersonData: any }, { rejectWithValue }) => {
     try {
-      const token = sessionStorage.getItem('token');
+      const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
       const response = await axios.put(`${API_URL}/delivery/${id}`, deliveryPersonData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -99,7 +101,7 @@ export const deleteDeliveryPerson = createAsyncThunk(
   'deliveryPersonnel/deleteDeliveryPerson',
   async (id: number, { rejectWithValue }) => {
     try {
-      const token = sessionStorage.getItem('token');
+      const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
       await axios.delete(`${API_URL}/deliveryPersonnel/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,4 +1,4 @@
-
+"use client";
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {API_URL} from '../../utils/apiUrl';
@@ -47,7 +47,7 @@ interface AuthResponse {
 export const authUser = createAsyncThunk(
   'auth/authUser',
   async (_, { rejectWithValue }) => {
-    const token = sessionStorage.getItem('token');
+    const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
     try {
       const response = await axios.post<AuthResponse>(
         `${API_URL}/auth/auth-user`,

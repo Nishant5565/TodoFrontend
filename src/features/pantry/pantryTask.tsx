@@ -1,3 +1,5 @@
+"use client";
+
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '../../utils/apiUrl';

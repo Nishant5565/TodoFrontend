@@ -13,7 +13,7 @@ interface LayoutProps {
 }
 
 const layout = ({ children }: LayoutProps) => {
-  const token = sessionStorage.getItem("token");
+  const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
   const { loading } = useSelector((state: RootState) => state.auth);
   const user = useSelector(
     (state: RootState) =>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -9,6 +9,8 @@ import { login, authUser } from "@/features/auth/auth";
 import { RootState, AppDispatch } from "./store";
 import { toast } from "sonner";
 import { useRouter } from 'next/navigation'
+import { EyeOffIcon } from "lucide-react";
+import { EyeIcon } from "lucide-react";
 
 const Login: FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -16,6 +18,7 @@ const Login: FC = () => {
     (state: RootState) => state.auth
   );
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
@@ -23,7 +26,6 @@ const Login: FC = () => {
       dispatch(authUser()).then((response) => {
         console.log(response.payload);
         const payload = response.payload as { user: { name: string, role: string } };
-        toast.info("Log in Successful !", {description: `Welcome back ${payload.user?.name}`});
         router.push(`${payload.user.role.toLowerCase()}/home`);
       });
     }
@@ -42,9 +44,8 @@ const Login: FC = () => {
     }),
     onSubmit: (values) => {
       dispatch(login(values)).then((response) => {
-        if (response.payload) {
+        if ( response.payload ) {
           const payload = response.payload as { user: { name: string, role: string } };
-          toast.success("Login Successful", {description: `Welcome back ${payload.user?.name}`});
           router.push(`${payload.user.role.toLowerCase()}/home`);
         }
       }
@@ -110,7 +111,7 @@ const Login: FC = () => {
             </div>
 
             {/* Password Field */}
-            <div>
+            <div className="relative">
               <label
                 htmlFor="password"
                 className="block text-sm font-medium text-white"
@@ -118,12 +119,21 @@ const Login: FC = () => {
                 Password
               </label>
               <input
-                type="password"
+                type= {showPassword ? "text" : "password"}
                 id="password"
                 className="w-full mt-2 p-3 rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-black transition-all duration-300 focus:border-transparent"
                 placeholder="Enter your password"
                 {...formik.getFieldProps("password")}
               />
+
+              <div
+                className="absolute right-4 top-10 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeIcon size={20} /> : <EyeOffIcon size={20} />}
+              </div>
+
+
               {formik.touched.password && formik.errors.password ? (
                 <div className="text-red-500 text-sm mt-1">
                   {formik.errors.password}

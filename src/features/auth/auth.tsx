@@ -43,6 +43,7 @@ export const login = createAsyncThunk(
 
 interface AuthResponse {
   token: string;
+  user: { name: string };
 }
 export const authUser = createAsyncThunk(
   'auth/authUser',
@@ -58,6 +59,7 @@ export const authUser = createAsyncThunk(
           },
         }
       );
+      toast.info('Log in successful', {description: `Welcome back ${response.data?.user?.name}`});
       sessionStorage.setItem('token', response.data.token);
       return response.data;
     } catch (error: any) {

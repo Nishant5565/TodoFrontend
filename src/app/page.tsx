@@ -53,13 +53,21 @@ const Login: FC = () => {
     },
   });
 
+  const [backgroundPosition, setBackgroundPosition] = useState("100% 0%");
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    setBackgroundPosition(window.innerWidth > 768 ? "center" : "100% 0%");
+  }
+}, []);
+
   return (
     <div
       className="flex  h-screen items-center justify-center bg-left-top"
       style={{
         backgroundImage: `url(${BG1.src})`,
         backgroundSize: "cover",
-        backgroundPosition:  window.innerWidth > 768 ? "center" : "100% 0%", 
+        backgroundPosition: backgroundPosition,
         backgroundRepeat: "no-repeat",
       }}
     >

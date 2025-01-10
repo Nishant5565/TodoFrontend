@@ -55,17 +55,17 @@ const Login: FC = () => {
 
   return (
     <div
-      className="flex h-screen items-center justify-center"
+      className="flex  h-screen items-center justify-center bg-left-top"
       style={{
         backgroundImage: `url(${BG1.src})`,
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundPosition:  window.innerWidth > 768 ? "center" : "100% 0%", 
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="flex rounded-[10px] overflow-hidden h-[90vh] w-[90vw] gap-40">
-        <div className="flex-1 justify-center items-center flex">
-          <div className="flex flex-col items-center">
+      <div className="flex md:flex-row flex-col rounded-[10px] overflow-hidden h-[90vh] w-[90vw] md:gap-40">
+        <div className="md:flex-1 justify-center items-center flex">
+          <div className="hidden flex-col items-center md:felx invisible md:visible">
             <h1
               className="text-[100px] font-bold text-clip"
               style={{
@@ -83,7 +83,7 @@ const Login: FC = () => {
         </div>
 
         {/* Right Side */}
-        <div className="w-[40vw] bg-[#ffffff48] backdrop-blur-lg p-10 rounded-3xl shadow-lg">
+        <div className="md:w-[40vw] h-full w-full md:bg-[#ffffff48]  bg-[#ffffff48]  backdrop-blur-lg p-10 rounded-3xl shadow-lg">
           <h2 className="text-3xl font-semibold text-white text-center">
             Login{" "}
           </h2>

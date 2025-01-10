@@ -73,12 +73,12 @@ useEffect(() => {
     >
       <div className="flex md:flex-row flex-col rounded-[10px] overflow-hidden h-[90vh] w-[90vw] md:gap-40">
         <div className="md:flex-1 justify-center items-center flex">
-          <div className="hidden flex-col items-center md:felx invisible md:visible">
+          <div className=" md: flex-col items-center md:felx  md:visible">
             <h1
-              className="text-[100px] font-bold text-clip"
+              className="md:text-[100px] text-[70px] font-bold md:text-clip text-white "
               style={{
                 WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                WebkitTextFillColor: backgroundPosition === "center" ? "transparent" : "white",
                 backgroundImage: `url(${BG1.src})`,
                 backgroundSize: "200%",
                 backgroundPosition: "100% 10%",

@@ -1,198 +1,28 @@
-"use client";
+'use client';
 
-import React, { FC, useEffect , useState} from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import BG1 from "../../public/BG2.png";
-import { login, authUser } from "@/features/auth/auth";
-import { RootState, AppDispatch } from "./store";
-import { toast } from "sonner";
-import { useRouter } from 'next/navigation'
-import { EyeOffIcon } from "lucide-react";
-import { EyeIcon } from "lucide-react";
+import Navbar from '@/components/Navbar/Navbar';
+import Sidebar from '@/components/SideBar/SideBar';
+import React, {useEffect, useState} from 'react'
 
-const Login: FC = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const { loading, error, user } = useSelector(
-    (state: RootState) => state.auth
-  );
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
+const page = () => {
 
   useEffect(() => {
-    const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
-    if (token) {
-      dispatch(authUser()).then((response) => {
-        console.log(response.payload);
-        const payload = response.payload as { user: { name: string, role: string } };
-        router.push(`${payload.user.role.toLowerCase()}/home`);
-      });
+    const isCollapsed = localStorage.getItem('isCollapsed');
+    const theme = localStorage.getItem('theme');
+
+    if (!theme) {
+      localStorage.setItem('theme', 'Light');
     }
-  }, []);
 
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email address").required("Required"),
-      password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
-        .required("Required"),
-    }),
-    onSubmit: (values) => {
-      dispatch(login(values)).then((response) => {
-        if ( response.payload ) {
-          const payload = response.payload as { user: { name: string, role: string } };
-          router.push(`${payload.user.role.toLowerCase()}/home`);
-        }
-      }
-      );
-    },
-  });
 
-  const [backgroundPosition, setBackgroundPosition] = useState("100% 0%");
+  } ,[])
 
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    setBackgroundPosition(window.innerWidth > 768 ? "center" : "100% 0%");
-  }
-}, []);
 
   return (
-    <div
-      className="flex  h-screen items-center justify-center bg-left-top"
-      style={{
-        backgroundImage: `url(${BG1.src})`,
-        backgroundSize: "cover",
-        backgroundPosition: backgroundPosition,
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      <div className="flex md:flex-row flex-col rounded-[10px] overflow-hidden h-[90vh] w-[90vw] md:gap-40">
-        <div className="md:flex-1 justify-center items-center flex">
-          <div className=" md: flex-col items-center md:felx  md:visible">
-            <h1
-              className="md:text-[100px] text-[70px] font-bold md:text-clip text-white "
-              style={{
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: backgroundPosition === "center" ? "transparent" : "white",
-                backgroundImage: `url(${BG1.src})`,
-                backgroundSize: "200%",
-                backgroundPosition: "100% 10%",
-              }}
-            >
-              Welcome
-            </h1>
-            <p className="mt-4 text-[20px] text-center"></p>
-          </div>
-        </div>
-
-        {/* Right Side */}
-        <div className="md:w-[40vw] h-full w-full md:bg-[#ffffff48]  bg-[#ffffff48]  backdrop-blur-lg p-10 rounded-3xl shadow-lg">
-          <h2 className="text-3xl font-semibold text-white text-center">
-            Login{" "}
-          </h2>
-          <form className="mt-8 space-y-6" onSubmit={formik.handleSubmit}>
-            {/* email Field */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-white"
-              >
-                Email
-              </label>
-              <input
-                type="text"
-                id="email"
-                className="w-full mt-2 p-3 rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-black transition-all duration-300 focus:border-transparent"
-                placeholder="Enter your email"
-                {...formik.getFieldProps("email")}
-              />
-              {formik.touched.email && formik.errors.email ? (
-                <div className="text-red-500 text-sm mt-1">
-                  {formik.errors.email}
-                </div>
-              ) : null}
-            </div>
-
-            {/* Password Field */}
-            <div className="relative">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-white"
-              >
-                Password
-              </label>
-              <input
-                type= {showPassword ? "text" : "password"}
-                id="password"
-                className="w-full mt-2 p-3 rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-black transition-all duration-300 focus:border-transparent"
-                placeholder="Enter your password"
-                {...formik.getFieldProps("password")}
-              />
-
-              <div
-                className="absolute right-4 top-10 cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeIcon size={20} /> : <EyeOffIcon size={20} />}
-              </div>
-
-
-              {formik.touched.password && formik.errors.password ? (
-                <div className="text-red-500 text-sm mt-1">
-                  {formik.errors.password}
-                </div>
-              ) : null}
-            </div>
-
-            {/* Forget Password */}
-            <div className="text-right">
-              <a href="#" className="text-sm text-gray-100 hover:underline">
-                Forgot password?
-              </a>
-            </div>
-
-            {/* Login Button */}
-            <div className="text-center">
-              <button
-                type="submit"
-                className="py-3 px-10 rounded-lg bg-white text-black font-semibold shadow-md hover:bg-gray-200 transition duration-200"
-                disabled={loading}
-              >
-                {loading ? "Logging in..." : "Login"}
-              </button>
-            </div>
-
-            {error && (
-              <div className="text-red-500 text-sm mt-1 text-center">
-                {error}
-              </div>
-            )}
-
-            {/* Divider */}
-            <div className="flex items-center mt-6">
-              <hr className="flex-1 border-gray-50" />
-              <span className="mx-4 text-white text-sm">or</span>
-              <hr className="flex-1 border-gray-50" />
-            </div>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-100">
-                Don't have an account?{" "}
-                <a href="#" className="text-[#FFF] hover:underline">
-                  Create one
-                </a>
-              </p>
-            </div>
-          </form>
-        </div>
-      </div>
+    <div>
+      
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default page

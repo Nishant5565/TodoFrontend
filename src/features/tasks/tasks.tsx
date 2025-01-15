@@ -1,3 +1,5 @@
+
+"use client"
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '../../utils/apiUrl';
@@ -7,8 +9,12 @@ interface Task {
   id: string;
   title: string;
   priority: string;
-  dueDate: string;
-  userId: string;
+  dueDate: Date;
+  repeat: boolean;
+  favorite: boolean;
+  reminder: string;
+  completed: boolean;
+  text : string;
 }
 
 interface TaskState {
@@ -23,12 +29,19 @@ const initialState: TaskState = {
   error: null,
 };
 
+const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
 // Fetch tasks thunk
 export const fetchTasks = createAsyncThunk<Task[], void, { rejectValue: string }>(
   'tasks/fetchTasks',
   async (_, { rejectWithValue }): Promise<Task[] | ReturnType<typeof rejectWithValue>> => {
     try {
-      const response = await axios.get<Task[]>(`${API_URL}/tasks`);
+      const response = await axios.get<Task[]>(`${API_URL}/tasks`,
+         {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error: any) {
       toast.error('Failed to fetch tasks', { description: error.response?.data?.message || 'Failed to fetch tasks' });
@@ -38,12 +51,20 @@ export const fetchTasks = createAsyncThunk<Task[], void, { rejectValue: string }
 );
 
 // Create task thunk
-export const createTask = createAsyncThunk<Task, { title: string; priority: string; dueDate: string; userId: string }, { rejectValue: string }>(
+export const createTask = createAsyncThunk<Task, { title: string; priority: string; dueDate: Date;   repeat : boolean; reminder : string; favorite : boolean; text : string  }, { rejectValue: string }>(
   'tasks/createTask',
   async (taskData, { rejectWithValue }) => {
+    toast.info('Creating your task...');
     try {
-      const response = await axios.post<Task>(`${API_URL}/tasks`, taskData);
+      const response = await axios.post<Task>(`${API_URL}/tasks`, taskData , {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       toast.success('Task created successfully');
+
+      
+
       return response.data;
     } catch (error: any) {
       toast.error('Failed to create task', { description: error.response?.data?.message || 'Failed to create task' });
@@ -52,12 +73,17 @@ export const createTask = createAsyncThunk<Task, { title: string; priority: stri
   }
 );
 
-// Update task thunk
-export const updateTask = createAsyncThunk<Task, { id: string; taskData: { title: string; priority: string; dueDate: string; userId: string } }, { rejectValue: string }>(
+export const updateTask = createAsyncThunk<Task, { id: string; taskData: { title: string; priority: string; dueDate: Date; repeat : boolean; reminder : string; favorite : boolean; completed: boolean } }, { rejectValue: string }>(
   'tasks/updateTask',
   async ({ id, taskData }, { rejectWithValue }) => {
+    toast.info('Updating your task...');
     try {
-      const response = await axios.put<Task>(`${API_URL}/tasks/${id}`, taskData);
+      const response = await axios.put<Task>(`${API_URL}/tasks/${id}`, taskData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       toast.success('Task updated successfully');
       return response.data;
     } catch (error: any) {
@@ -71,8 +97,14 @@ export const updateTask = createAsyncThunk<Task, { id: string; taskData: { title
 export const deleteTask = createAsyncThunk<string, string, { rejectValue: string }>(
   'tasks/deleteTask',
   async (id, { rejectWithValue }) => {
+    toast.info('Deleting the task...');
     try {
-      await axios.delete(`${API_URL}/tasks/${id}`);
+      await axios.delete(`${API_URL}/tasks/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       toast.success('Task deleted successfully');
       return id;
     } catch (error: any) {

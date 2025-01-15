@@ -10,8 +10,7 @@ interface ThemeState {
   theme: ThemeName;
 }
 
-const savedTheme = (localStorage.getItem('theme') as ThemeName) || 'Light';
-
+const savedTheme = (typeof window !== 'undefined' && (localStorage.getItem('theme') as ThemeName)) || 'Light';
 const initialState: ThemeState = {
   theme: savedTheme,
 };

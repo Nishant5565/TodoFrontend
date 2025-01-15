@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/todo/store";
-import { setCollapse } from "@/features/SideBar/SideBar";
+import {  toggleCollapse} from "@/features/SideBar/SideBar";
 import gsap from "gsap";
 import { LuClipboardList } from "react-icons/lu";
 import { CiCalendar, CiMap, CiStar } from "react-icons/ci";
@@ -13,6 +13,7 @@ import { FaUser } from "react-icons/fa";
 import Link from "next/link";
 import { selectThemeProperties } from "@/features/theme/theme";
 import useAuth from "@/utils/useAuth";
+import { IoCloseSharp } from "react-icons/io5";
 
 
 const Sidebar = () => {
@@ -34,17 +35,7 @@ const Sidebar = () => {
 
   const [activeSection, setActiveSection] = useState("All Tasks");
 
-  useEffect(() => {
-    const handleStorageChange = () => {
-      dispatch(setCollapse(localStorage.getItem("isCollapsed") === "true"));
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, [dispatch]);
+    
 
 
   useEffect(() => {
@@ -53,7 +44,7 @@ const Sidebar = () => {
         gsap.to(sidebarRef.current, {
           x: 0,
           duration: 0.3,
-          width: "250px",
+          width: window.innerWidth > 768 ? "250px" : "80%",
           left: 0,
           ease: "power2.inOut",
         });
@@ -97,8 +88,11 @@ const Sidebar = () => {
         style={{ backgroundColor: themeProperties.backgroundColor, 
             color: themeProperties.textColor,
          }}
-        className=" relative inset-y-0 left-0  ease-in-out h-full p-2 rounded-r-[20px] overflow-hidden"
+        className=" md:relative fixed md:shadow-none shadow-2xl inset-y-0 left-0  ease-in-out h-full p-2 rounded-r-[20px] z-50 overflow-hidden"
       >
+        <button className="absolute top-2 right-2 md:hidden" onClick={() => dispatch(toggleCollapse())}>
+        <IoCloseSharp  size={25} />
+        </button>
         <div className="flex flex-col items-center py-2">
           <img
             src={
@@ -115,7 +109,7 @@ const Sidebar = () => {
             {user ? userFirstName  : <Link href="/auth" >Login</Link>}
           </h2>
         </div>
-        <nav className="mt-2 p-4 "
+        <nav className="mt-2 p-4 rounded-lg"
             style={{ backgroundColor: themeProperties.backgroundBox }}
         >
           {sections.map((section) => (
@@ -137,7 +131,7 @@ const Sidebar = () => {
             </Link>
           ))}
         </nav>
-        <div className="mt-2 px-4 "
+        <div className="mt-2 px-4 rounded-lg"
                style={{ backgroundColor: themeProperties.backgroundBox }}
         >
           <a
@@ -157,20 +151,20 @@ const Sidebar = () => {
               <div className=" text-lg"> 4 </div>
             </div>
             <div className="flex justify-center mt-2">
-              <div className="w-20 h-20">
-                <svg className="w-full h-full" viewBox="0 0 32 32">
+              <div className="w-32 h-32">
+                <svg className="w-full h-full" viewBox="0 0 40 28">
                   <circle
-                    cx="16"
+                    cx="18"
                     cy="16"
-                    r="12"
+                    r="15"
                     fill="none"
                     stroke="#e5e5e5"
                     strokeWidth="4"
                   />
                   <circle
-                    cx="16"
+                    cx="18"
                     cy="16"
-                    r="12"
+                    r="15"
                     fill="none"
                     stroke="#4caf50"
                     strokeWidth="4"

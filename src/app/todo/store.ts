@@ -11,7 +11,7 @@ export const store = configureStore({
     auth: authReducer,
     theme: themeReducer,
     sidebar: sideBarReducer, 
-    taks : taskReducer,
+    tasks : taskReducer,
   },
 });
 

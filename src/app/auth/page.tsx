@@ -26,8 +26,7 @@ const Login: FC = () => {
   const [isSignup, setIsSignup] = useState(false);
 
   useEffect(() => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (token) {
       dispatch(authUser()).then((response) => {
         console.log(response.payload);
@@ -40,6 +39,7 @@ const Login: FC = () => {
       email: "",
       password: "",
       name: "",
+      tasks: typeof window !== "undefined" && localStorage.getItem("tasks") ? JSON.parse(localStorage.getItem("tasks") as string) : [],
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Invalid email address").required("Required"),
@@ -51,13 +51,13 @@ const Login: FC = () => {
       ),
     }),
     onSubmit: (values) => {
-      // console.log(values);
       if (isSignup) {
         dispatch(signup(values)).then((response) => {
           if (response.payload) {
           }
         });
       } else {
+
         dispatch(login(values)).then((response) => {
           if (response.payload) {
           }
@@ -73,13 +73,10 @@ const Login: FC = () => {
       setBackgroundPosition(window.innerWidth > 768 ? "center" : "100% 0%");
     }
 
-    if (window.innerWidth > 768) {
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      if (token) {
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      if ( token) {
         window.location.href = "/";
       }
-    }
   }, []);
 
   return (
@@ -155,6 +152,7 @@ const Login: FC = () => {
                 id="email"
                 className="w-full mt-2 p-3 rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-black transition-all duration-300 focus:border-transparent"
                 placeholder="Enter your email"
+                style={{ backgroundColor: themeProperties.backgroundColor }}
                 {...formik.getFieldProps("email")}
               />
               {formik.touched.email && formik.errors.email ? (
@@ -177,6 +175,7 @@ const Login: FC = () => {
                 id="password"
                 className="w-full mt-2 p-3 rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-black transition-all duration-300 focus:border-transparent"
                 placeholder="Enter your password"
+                style={{ backgroundColor: themeProperties.backgroundColor }}
                 {...formik.getFieldProps("password")}
               />
 
@@ -202,7 +201,10 @@ const Login: FC = () => {
             <div className="text-center">
               <button
                 type="submit"
-                className="py-3 px-10 rounded-lg bg-white text-black font-semibold shadow-md hover:bg-gray-200 transition duration-200"
+                className="py-3 px-10 rounded-lg text-black font-semibold shadow-md hover:bg-gray-200 transition duration-200"
+                style={{ backgroundColor: themeProperties.backgroundColor, 
+                color: themeProperties.textColor
+                 }}
                 // disabled={loading}
                 onClick={() => {
                   if (!isSignup) {

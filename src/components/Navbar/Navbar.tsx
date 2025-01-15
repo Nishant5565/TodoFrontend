@@ -9,33 +9,36 @@ import ThemeToggle from "../SwitchTheme/SwitchTheme";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/todo/store";
 import { selectThemeProperties } from "@/features/theme/theme";
-import { setCollapse,toggleCollapse } from "@/features/SideBar/SideBar";
+import {  toggleCollapse } from "@/features/SideBar/SideBar";
+import Link from "next/link";
+import { logout } from "@/features/auth/auth";
+
+
 
 const Navbar = () => {
   const themeProperties = useSelector((state: RootState) =>
     selectThemeProperties(state)
   );
+  const user = useSelector((state: RootState) => state.auth.user as any);
 
-     const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-
-     const toggleSidebar = () => {
-
-
-     setIsCollapsed(!isCollapsed);
-     dispatch(toggleCollapse());
-     };
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+    dispatch(toggleCollapse());
+  };
 
   useEffect(() => {
-    const storedIsCollapsed = localStorage.getItem("isCollapsed");
-    if (storedIsCollapsed === null) {
-          localStorage.setItem("isCollapsed", "false");
-     } else {
-          setIsCollapsed(storedIsCollapsed === "true");
-     }
-     
+    if (typeof window !== "undefined") {
+      const storedIsCollapsed = localStorage.getItem("isCollapsed");
+      if (storedIsCollapsed === null) {
+        localStorage.setItem("isCollapsed", "false");
+      } else {
+        setIsCollapsed(storedIsCollapsed === "true");
+      }
+    }
   }, []);
 
   return (
@@ -51,6 +54,21 @@ const [isCollapsed, setIsCollapsed] = useState(false);
       </div>
 
       <div className="flex items-center gap-4">
+        {user ? (
+          <button
+            onClick={() => {
+              dispatch(logout());
+              if (typeof window !== "undefined") {
+                localStorage.removeItem("token");
+              }
+              window.location.reload();
+            }}
+          >
+            Logout
+          </button>
+        ) : (
+          <Link href="/auth">Login</Link>
+        )}
         <MdDashboard
           size={22}
           className="cursor-pointer"

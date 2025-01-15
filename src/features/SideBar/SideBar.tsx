@@ -4,8 +4,10 @@ interface SidebarState {
   isCollapsed: boolean;
 }
 
+const isBrowser = typeof window !== 'undefined';
+
 const initialState: SidebarState = {
-  isCollapsed: localStorage.getItem('isCollapsed') === 'true',
+  isCollapsed: isBrowser ? localStorage.getItem('isCollapsed') === 'true' : false,
 };
 
 const sidebarSlice = createSlice({
@@ -14,14 +16,12 @@ const sidebarSlice = createSlice({
   reducers: {
     toggleCollapse(state) {
       state.isCollapsed = !state.isCollapsed;
-      localStorage.setItem('isCollapsed', state.isCollapsed.toString());
-    },
-    setCollapse(state, action: PayloadAction<boolean>) {
-      state.isCollapsed = action.payload;
-      localStorage.setItem('isCollapsed', state.isCollapsed.toString());
+      if (isBrowser) {
+        localStorage.setItem('isCollapsed', state.isCollapsed.toString());
+      }
     },
   },
 });
 
-export const { toggleCollapse, setCollapse } = sidebarSlice.actions;
+export const { toggleCollapse } = sidebarSlice.actions;
 export default sidebarSlice.reducer;

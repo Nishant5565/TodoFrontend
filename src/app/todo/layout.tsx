@@ -1,13 +1,12 @@
 "use client";
 import "../globals.css";
 import ReduxProvider from "./ReduxProvider";
-import { Toaster } from "@/components/ui/sonner";
-import Navbar from "@/components/Navbar/Navbar";
-import Sidebar from "@/components/SideBar/SideBar";
+import Navbar from "../../components/Navbar/Navbar";
+import Sidebar from "../../components/SideBar/SideBar";
 import "../index.css";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/todo/store";
-import Loader from "@/components/Loader/Loader";
+import { RootState } from "../../app/todo/store";
+import Loader from "../../components/Loader/Loader";
 
 export default function RootLayout({
   children,
@@ -27,7 +26,6 @@ export default function RootLayout({
 
   return (
     <div className=" h-screen overflow-hidden">
-      <Toaster />
       <ReduxProvider>
         <div className=" flex flex-col w-screen">
           <div className="h-[40px] w-full">

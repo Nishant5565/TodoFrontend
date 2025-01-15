@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import BG1 from "../../../public/BG2.png";
-import { login, authUser, signup } from "@/features/auth/auth";
+import { login, authUser, signup } from "../../features/auth/auth";
 import { RootState, AppDispatch } from "../todo/store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { EyeOffIcon } from "lucide-react";
 import { EyeIcon } from "lucide-react";
-import { selectThemeProperties } from "@/features/theme/theme";
+import { selectThemeProperties } from "../../features/theme/theme";
 
 const Login: FC = () => {
   const dispatch: AppDispatch = useDispatch();

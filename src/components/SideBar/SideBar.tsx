@@ -53,7 +53,7 @@ const Sidebar = () => {
       <div
         ref={sidebarRef}
         style={{ backgroundColor: themeProperties.backgroundColor, color: themeProperties.textColor }}
-        className={`md:relative fixed md:shadow-none shadow-2xl inset-y-0 left-0 ease-in-out h-full p-2 rounded-r-[20px] z-50 overflow-hidden transition-all duration-300 ${isCollapsed ? 'translate-x-0 w-[250px]' : '-translate-x-full md:w-0 '}`}
+        className={`md:relative fixed md:shadow-none shadow-2xl inset-y-0 left-0 ease-in-out h-full p-2 rounded-r-[20px] z-50 overflow-hidden transition-all duration-300 ${isCollapsed ? 'translate-x-0 w-[250px]' : 'md:-translate-x-[200px] -translate-x-full md:w-0 '}`}
       >
         <button className="absolute top-2 right-2 md:hidden" onClick={() => dispatch(toggleCollapse())}>
           <IoCloseSharp size={25} />

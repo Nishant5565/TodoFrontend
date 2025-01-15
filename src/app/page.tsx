@@ -1,28 +1,18 @@
-'use client';
+"use client";
 
-import Navbar from '@/components/Navbar/Navbar';
-import Sidebar from '@/components/SideBar/SideBar';
-import React, {useEffect, useState} from 'react'
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const page = () => {
+  const router = useRouter();
 
   useEffect(() => {
-    const isCollapsed = localStorage.getItem('isCollapsed');
-    const theme = localStorage.getItem('theme');
-
-    if (!theme) {
-      localStorage.setItem('theme', 'Light');
-    }
-
-
-  } ,[])
-
+    router.push('/todo');
+  }, [router]);
 
   return (
-    <div>
-      
-    </div>
-  )
+    <div></div>
+  );
 }
 
-export default page
+export default page;

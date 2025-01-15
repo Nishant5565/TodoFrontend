@@ -22,7 +22,7 @@ export const login = createAsyncThunk(
   async (credentials: { email: string; password: string }, { rejectWithValue }) => {
     try {
       const response:any = await axios.post(`${API_URL}/auth/login`, credentials);
-      sessionStorage.setItem('token', response.data.token);
+      localStorage.setItem('token', response.data.token);
 
       if(response.status === 200){
       toast.success('Login successful', {description: `Welcome back ${response.data.user.name}`});
@@ -38,6 +38,27 @@ export const login = createAsyncThunk(
   }
 );
 
+// ! Signup thunk
+export const signup = createAsyncThunk(
+  'auth/signup',
+  async (credentials: { email: string; password: string; name: string }, { rejectWithValue }) => {
+    try {
+      const response: any = await axios.post(`${API_URL}/auth/register`, credentials);
+      localStorage.setItem('token', response.data.token);
+
+      if (response.status === 201) {
+        toast.success('Signup successful', { description: `Welcome ${response.data.user.name}` });
+      } else {
+        toast.error('Signup failed', { description: response.data.message });
+      }
+      return response.data;
+    } catch (error: any) {
+      toast.error('Signup failed', { description: error.response?.data?.message || 'Signup failed' });
+      return rejectWithValue(error.response?.data?.message || 'Signup failed');
+    }
+  }
+);
+
 // ! Auth slice if their is already a token in the device
 
 
@@ -48,7 +69,7 @@ interface AuthResponse {
 export const authUser = createAsyncThunk(
   'auth/authUser',
   async (_, { rejectWithValue }) => {
-    const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     try {
       const response = await axios.post<AuthResponse>(
         `${API_URL}/auth/auth-user`,
@@ -60,7 +81,7 @@ export const authUser = createAsyncThunk(
         }
       );
       toast.info('Log in successful', {description: `Welcome back ${response.data?.user?.name}`});
-      sessionStorage.setItem('token', response.data.token);
+      localStorage.setItem('token', response.data.token);
       return response.data;
     } catch (error: any) {
       toast.error('Failed to fetch user', {description: error.response?.data?.message || 'Failed to fetch user'});
@@ -103,9 +124,19 @@ const authSlice = createSlice({
       .addCase(authUser.rejected, (state, action: PayloadAction<any>) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(signup.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(signup.fulfilled, (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(signup.rejected, (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
       });
-
-
   },
 });
 

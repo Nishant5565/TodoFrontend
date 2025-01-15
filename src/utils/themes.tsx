@@ -2,18 +2,23 @@
 
 const themes = {
   "Dark": {
-    "primaryColor": "#FFD700",
-    "secondaryColor": "#FF6347",
+    "primaryColor": "#2F3630",
+    "secondaryColor": "#357937E0",
     "backgroundColor": "#000000",
     "textColor": "#FFFFFF",
-    "navbarColor": "#333333"
+    "specialText": "#97F69BB5",
+    "backgroundBox": "#1E1E1E",
+    "bgImage": "url('https://static.vecteezy.com/system/resources/previews/007/278/150/non_2x/dark-background-abstract-with-light-effect-vector.jpg')",
   },
   "Light": {
-    "primaryColor": "#FF6347",
-    "secondaryColor": "#FFD700",
+    "primaryColor": "#linear-gradient(358.24deg, #3579371A 1.27%, #D0FFD21A 98.29%)",
+    "secondaryColor": "#35793729",
     "backgroundColor": "#FFFFFF",
     "textColor": "#000000",
-    "navbarColor": "#F8F8F8"
+    "specialText": "#142E159E",
+    "backgroundBox": "#EEF6EF",
+    "bgImage": "url('https://static.vecteezy.com/system/resources/previews/007/278/150/non_2x/dark-background-abstract-with-light-effect-vector.jpg')",
+    
   }
 };
 

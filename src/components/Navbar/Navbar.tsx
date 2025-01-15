@@ -7,7 +7,7 @@ import { MdDashboard } from "react-icons/md";
 import Logo from "@/assets/images/logo.png";
 import ThemeToggle from "../SwitchTheme/SwitchTheme";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/store";
+import { RootState } from "@/app/todo/store";
 import { selectThemeProperties } from "@/features/theme/theme";
 import { setCollapse,toggleCollapse } from "@/features/SideBar/SideBar";
 
@@ -22,6 +22,8 @@ const [isCollapsed, setIsCollapsed] = useState(false);
 
 
      const toggleSidebar = () => {
+
+
      setIsCollapsed(!isCollapsed);
      dispatch(toggleCollapse());
      };

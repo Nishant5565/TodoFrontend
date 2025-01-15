@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/app/store";
+import { RootState } from "@/app/todo/store";
 import { setCollapse } from "@/features/SideBar/SideBar";
 import gsap from "gsap";
 import { LuClipboardList } from "react-icons/lu";
@@ -12,14 +12,18 @@ import { IoAdd } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import Link from "next/link";
 import { selectThemeProperties } from "@/features/theme/theme";
+import useAuth from "@/utils/useAuth";
 
 const Sidebar = () => {
+
+     
   const isCollapsed = useSelector(
     (state: RootState) => state.sidebar.isCollapsed
   );
     const themeProperties = useSelector((state: RootState) =>
       selectThemeProperties(state)
     );
+    const [isOnAuthPage, setIsOnAuthPage] = useState(false);
   
   const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
@@ -39,40 +43,56 @@ const Sidebar = () => {
     };
   }, [dispatch]);
 
+
   useEffect(() => {
     if (sidebarRef.current) {
       if (isCollapsed) {
         gsap.to(sidebarRef.current, {
           x: 0,
           duration: 0.3,
-          ease: "power3.inOut",
+          width: "250px",
+          left: 0,
+          ease: "power2.inOut",
         });
       } else {
         gsap.to(sidebarRef.current, {
           x: -sidebarRef.current.offsetWidth - 20,
+          width : "0px",
           duration: 0.3,
-          ease: "power3.inOut",
+          left: -200,
+          ease: "power2.inOut",
         });
       }
     }
   }, [isCollapsed]);
 
+
+
   const sections = [
-    { name: "All Tasks",  link: "all-tasks", icon: <LuClipboardList className="mr-3" size={23} /> },
+    { name: "All Tasks",  link: " /", icon: <LuClipboardList className="mr-3" size={23} /> },
     { name: "Today", link: "today-tasks",   icon: <CiCalendar className="mr-3" size={23} /> },
     { name: "Important", link: "important-tasks", icon: <CiStar className="mr-3" size={23} /> },
-    { name: "Planned", link: "all-tasks", icon: <CiMap className="mr-3" size={23} /> },
+    { name: "Planned", link: " /", icon: <CiMap className="mr-3" size={23} /> },
     {
-      name: "Assigned to me", link: "all-tasks",
+      name: "Assigned to me", link: " /",
       icon: <MdOutlineAssignmentInd className="mr-3" size={23} />,
     },
   ];
 
+  useAuth();
+
   return (
-    <div className="flex h-full">
+    <div className="flex h-full rounded-[20px]"
+    style={{
+     display: isOnAuthPage ? "none" : "flex",
+    }}
+    >
       <div
         ref={sidebarRef}
-        className=" sticky inset-y-0 left-0 bg-[#EEF6EF] text-gray-800 w-64 shadow-lg transform transition-transform duration-300 ease-in-out h-full p-2"
+        style={{ backgroundColor: themeProperties.backgroundBox, 
+            color: themeProperties.textColor,
+         }}
+        className=" relative inset-y-0 left-0  ease-in-out h-full p-2 rounded-r-[20px] overflow-hidden"
       >
         <div className="flex flex-col items-center py-2">
           <img
@@ -81,38 +101,52 @@ const Sidebar = () => {
                 ? "https://static-00.iconduck.com/assets.00/profile-circle-icon-2048x2048-cqe5466q.png"
                 : "https://www.pngitem.com/pimgs/m/404-4042710_circle-profile-picture-png-transparent-png.png"
             }
-            className="w-20 h-20 rounded-full border-2 border-gray-300"
+            className="w-20 h-20 rounded-full border-2 border-gray-300     "
           />
-          <h2 className="mt-4 text-lg font-semibold">
-            {user ? "user" : "Login"}
+          <h2 className="mt-4 text-lg font-semibold"
+          style={{ color: themeProperties.textColor }}
+          
+          >
+            {user ? "user" : <Link href="/auth" >Login</Link>}
           </h2>
         </div>
-        <nav className="mt-2 p-4 bg-white">
+        <nav className="mt-2 p-4 "
+            style={{ backgroundColor: themeProperties.backgroundColor }}
+        >
           {sections.map((section) => (
             <Link
               key={section.name}
               href= {`/${section.link}`}
-              className={`flex items-center py-2 px-4 rounded-lg text-sm hover:bg-gray-200 ${
+              
+              className={`flex items-center py-2 px-4 rounded-lg text-sm ${
+                themeProperties.textColor != "#000000" ? "hover:bg-[#1d1d1d]" : "hover:bg-gray-200"
+              }  ${
                 activeSection === section.name
-                  ? "bg-[#EEF6EF] text-[#357937]"
+                  ? themeProperties.textColor != "#000000" ? "bg-[#1d1d1d] text-[#357937]" : "bg-[#EEF6EF] text-[#357937]"
                   : ""
               }`}
+
               onClick={() => setActiveSection(section.name)}
             >
               {section.icon} {section.name}
             </Link>
           ))}
         </nav>
-        <div className="mt-2 px-4 bg-white hover:bg-gray-200">
+        <div className="mt-2 px-4 "
+               style={{ backgroundColor: themeProperties.backgroundColor }}
+        >
           <a
             href="#"
             className="flex items-center py-3 px-4 rounded-lg "
+               style={{ color: themeProperties.textColor }}
           >
             <IoAdd className="mr-3 text-gray-500" /> Add List
           </a>
         </div>
         <div className=" w-full  mt-2">
-          <div className="bg-gray-50 p-4 rounded-lg shadow">
+          <div className=" p-4 rounded-lg shadow"
+          style={{ backgroundColor: themeProperties.backgroundColor }}
+          >
             <div className="">
               <h3 className="font-semibold text-sm">Today Tasks</h3>
               <div className=" text-lg"> 4 </div>

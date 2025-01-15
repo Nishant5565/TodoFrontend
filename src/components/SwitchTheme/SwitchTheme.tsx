@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/app/store';
+import { RootState } from '@/app/todo/store';
 import { setTheme, selectTheme } from '@/features/theme/theme';
 import { ThemeName } from '@/features/theme/theme';
 import { FiMoon } from "react-icons/fi";

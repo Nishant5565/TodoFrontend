@@ -1,9 +1,9 @@
 
 
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from '../features/auth/auth';
-import themeReducer from '../features/theme/theme'; 
-import sideBarReducer from '../features/SideBar/SideBar'; 
+import authReducer from '../../features/auth/auth';
+import themeReducer from '../../features/theme/theme'; 
+import sideBarReducer from '../../features/SideBar/SideBar'; 
 
 
 export const store = configureStore({

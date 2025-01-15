@@ -1,7 +1,7 @@
 "use client";
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '@/app/store';
+import { RootState } from '@/app/todo/store';
 import themes from '@/utils/themes';
 
 export type ThemeName = 'Dark' | 'Light';
@@ -30,6 +30,7 @@ const themeSlice = createSlice({
       const properties = themeProperties[state.theme];
       localStorage.setItem('theme', state.theme);
       document.body.style.backgroundColor = properties.backgroundColor;
+      document.body.style.color = properties.textColor;
     },
   },
 });

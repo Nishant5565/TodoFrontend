@@ -44,9 +44,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
 
       </div>
         <div>
-          <div className="text-sm text-gray-500">Due - { task?.dueDate ? formatDistanceToNow(new Date(task?.dueDate), { addSuffix: true }) : "No Due Date" }
+          <div className="md:text-sm text-gray-500 text-nowrap text-[12px]">Due - { task?.dueDate ? formatDistanceToNow(new Date(task?.dueDate), { addSuffix: true }) : "No Due Date" }
           </div>
-          <div className="text-sm text-gray-500">{task?.reminder}</div>
+          <div className="md:text-sm text-gray-500 text-[12px]">{task?.reminder}</div>
         </div>
       </div>
 

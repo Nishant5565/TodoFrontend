@@ -89,11 +89,11 @@ const Login: FC = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="flex md:flex-row flex-col rounded-[10px] overflow-hidden h-[90vh] w-[90vw] md:gap-40">
-        <div className="md:flex-1 justify-center items-center flex">
-          <div className=" md: flex-col items-center md:felx  md:visible">
+      <div className="flex xl:flex-row flex-col rounded-[10px] overflow-hidden h-[90vh] w-[90vw] xl:gap-40">
+        <div className="xl:flex-1 justify-center items-center flex">
+          <div className=" xl: flex-col items-center xl:felx  xl:visible">
             <h1
-              className="md:text-[100px] text-[70px] font-bold md:text-clip text-white "
+              className="xl:text-[100px] text-[70px] font-bold xl:text-clip text-white "
               style={{
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor:
@@ -110,7 +110,7 @@ const Login: FC = () => {
         </div>
 
         {/* Right Side */}
-        <div className="md:w-[40vw] h-full w-full md:bg-[#ffffff48]  bg-[#ffffff48]  backdrop-blur-lg p-10 rounded-3xl shadow-lg">
+        <div className="xl:w-[40vw] h-full w-full xl:bg-[#ffffff48]  bg-[#ffffff48]  backdrop-blur-lg p-10 rounded-3xl shadow-lg">
           <h2 className="text-3xl font-semibold text-white text-center">
             {isSignup ? "Signup" : "Login"}{" "}
           </h2>
@@ -201,7 +201,7 @@ const Login: FC = () => {
             <div className="text-center">
               <button
                 type="submit"
-                className="py-3 px-10 rounded-lg text-black font-semibold shadow-md hover:bg-gray-200 transition duration-200"
+                className="py-3 px-10 rounded-lg text-black font-semibold shadow-xl hover:bg-gray-200 transition duration-200"
                 style={{ backgroundColor: themeProperties.backgroundColor, 
                 color: themeProperties.textColor
                  }}

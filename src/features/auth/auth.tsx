@@ -34,10 +34,11 @@ export const login = createAsyncThunk(
       }
 
       if (response.status === 200) {
+        window.location.href = "/todo";
         toast.success("Login successful", {
           description: `Welcome back ${response.data.user.name}`,
         });
-        window.location.href = "/todo";
+        
         if (typeof window !== "undefined") {
           localStorage.setItem("tasks", [] as any);
         }

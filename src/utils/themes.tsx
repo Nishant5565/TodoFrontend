@@ -11,7 +11,7 @@ const themes = {
     "bgImage": "url('https://static.vecteezy.com/system/resources/previews/007/278/150/non_2x/dark-background-abstract-with-light-effect-vector.jpg')",
   },
   "Light": {
-    "primaryColor": "#linear-gradient(358.24deg, #3579371A 1.27%, #D0FFD21A 98.29%)",
+    "primaryColor": "#35793729",
     "secondaryColor": "#35793729",
     "backgroundColor": "#FFFFFF",
     "textColor": "#000000",

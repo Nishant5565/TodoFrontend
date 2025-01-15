@@ -14,6 +14,7 @@ import Link from "next/link";
 import { selectThemeProperties } from "@/features/theme/theme";
 import useAuth from "@/utils/useAuth";
 
+
 const Sidebar = () => {
 
      
@@ -25,7 +26,9 @@ const Sidebar = () => {
     );
     const [isOnAuthPage, setIsOnAuthPage] = useState(false);
   
-  const user = useSelector((state: RootState) => state.auth.user);
+
+
+  const user: any | null = useSelector((state: RootState) => state?.auth?.user) || null;
   const dispatch = useDispatch();
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -67,17 +70,19 @@ const Sidebar = () => {
   }, [isCollapsed]);
 
 
+  const userFirstName = user?.user?.name.split(" ")[0];
 
   const sections = [
-    { name: "All Tasks",  link: " /", icon: <LuClipboardList className="mr-3" size={23} /> },
-    { name: "Today", link: "today-tasks",   icon: <CiCalendar className="mr-3" size={23} /> },
-    { name: "Important", link: "important-tasks", icon: <CiStar className="mr-3" size={23} /> },
-    { name: "Planned", link: " /", icon: <CiMap className="mr-3" size={23} /> },
+    { name: "All Tasks",  link: "todo/", icon: <LuClipboardList className="mr-3" size={23} /> },
+    { name: "Today", link: "todo/today-tasks",   icon: <CiCalendar className="mr-3" size={23} /> },
+    { name: "Important", link: "todo/important-tasks", icon: <CiStar className="mr-3" size={23} /> },
+    { name: "Planned", link: " todo/", icon: <CiMap className="mr-3" size={23} /> },
     {
-      name: "Assigned to me", link: " /",
+      name: "Assigned to me", link: " todo/",
       icon: <MdOutlineAssignmentInd className="mr-3" size={23} />,
     },
   ];
+
 
   useAuth();
 
@@ -89,7 +94,7 @@ const Sidebar = () => {
     >
       <div
         ref={sidebarRef}
-        style={{ backgroundColor: themeProperties.backgroundBox, 
+        style={{ backgroundColor: themeProperties.backgroundColor, 
             color: themeProperties.textColor,
          }}
         className=" relative inset-y-0 left-0  ease-in-out h-full p-2 rounded-r-[20px] overflow-hidden"
@@ -107,11 +112,11 @@ const Sidebar = () => {
           style={{ color: themeProperties.textColor }}
           
           >
-            {user ? "user" : <Link href="/auth" >Login</Link>}
+            {user ? userFirstName  : <Link href="/auth" >Login</Link>}
           </h2>
         </div>
         <nav className="mt-2 p-4 "
-            style={{ backgroundColor: themeProperties.backgroundColor }}
+            style={{ backgroundColor: themeProperties.backgroundBox }}
         >
           {sections.map((section) => (
             <Link
@@ -133,7 +138,7 @@ const Sidebar = () => {
           ))}
         </nav>
         <div className="mt-2 px-4 "
-               style={{ backgroundColor: themeProperties.backgroundColor }}
+               style={{ backgroundColor: themeProperties.backgroundBox }}
         >
           <a
             href="#"
@@ -145,7 +150,7 @@ const Sidebar = () => {
         </div>
         <div className=" w-full  mt-2">
           <div className=" p-4 rounded-lg shadow"
-          style={{ backgroundColor: themeProperties.backgroundColor }}
+          style={{ backgroundColor: themeProperties.backgroundBox }}
           >
             <div className="">
               <h3 className="font-semibold text-sm">Today Tasks</h3>

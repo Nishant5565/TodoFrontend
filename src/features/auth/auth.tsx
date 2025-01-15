@@ -5,7 +5,7 @@ import {API_URL} from '../../utils/apiUrl';
 import {toast} from 'sonner';
 
 interface UserState {
-  user: { user: string; token: string } | null;
+  user: { user: object; token: string } | null;
   loading: boolean;
   error: string | null;
 }

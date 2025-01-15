@@ -25,20 +25,8 @@ import {
 import { BsBell, BsBellFill } from "react-icons/bs";
 import { TbRepeat, TbRepeatOff } from "react-icons/tb";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area"
+
 import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { CiCalendar } from "react-icons/ci";
@@ -211,7 +199,7 @@ const TasksPage = () => {
           themeProperties={themeProperties}
           handleAddTask={handleAddTask}
         />
-        <div className=" h-[55vh] overflow-scroll custom-scrollbar">
+        <div className=" h-[50vh] overflow-scroll custom-scrollbar">
           {mytasks.length > 0 ? (
             <>
               <TaskList
